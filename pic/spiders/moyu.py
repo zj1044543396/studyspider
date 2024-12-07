@@ -8,6 +8,13 @@ class MoyuSpider(scrapy.Spider):
     start_urls = ["https://www.moyublog.com/hdwallpapers/fengjing/"]
 
     def parse(self, response, **kwargs):
+        """
+        提取元素
+        :param response:
+        :param kwargs:
+        :return:
+        """
+        # 获取到所有的li标签
         li_list = response.xpath("//div[@class='slist']/ul/li")
 
         for li in li_list:
@@ -18,6 +25,12 @@ class MoyuSpider(scrapy.Spider):
             yield scrapy.Request(href_list, callback=self.parse_details)
 
     def parse_details(self, response, **kwargs):
+        """
+        解析每个url里面子url响应的数据
+        :param response:
+        :param kwargs:
+        :return:
+        """
         pic = PicItem()
         img_src = response.xpath("//div[@class='photo-pic']/p/img/@src").extract_first()
         img_name = response.xpath("//div[@class='photo-pic']/p/img/@alt").extract_first()
